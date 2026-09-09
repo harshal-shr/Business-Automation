@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>botmart — AI Systems Marketplace</title>
+<meta name="description" content="Discover and integrate production-ready custom AI workflows seamlessly.">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ============ NAVBAR (visible after login) ============ -->
+<nav id="mainNav" class="navbar navbar-expand-lg top-nav d-none">
+  <div class="container-fluid px-3 px-md-4">
+    <a class="navbar-brand logo" href="#" onclick="go('feed');return false;">bot<span>mart</span></a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto text-nowrap">
+        <li class="nav-item"><a class="nav-link" data-nav="feed" href="#" onclick="go('feed');return false;">Systems Feed</a></li>
+        <li class="nav-item"><a class="nav-link" data-nav="needs" href="#" onclick="go('needs');return false;">Business Needs</a></li>
+        <li class="nav-item"><a class="nav-link" data-nav="creator" href="#" onclick="go('creator');return false;">Creator Portal</a></li>
+        <li class="nav-item"><a class="nav-link" data-nav="inbox" href="#" onclick="go('inbox');return false;">Inbox</a></li>
+        <li class="nav-item"><a class="nav-link" data-nav="profile" href="#" onclick="go('profile');return false;">Profile</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<main class="pb-5">
+
+<!-- ============ AUTH PAGE ============ -->
+<section id="page-auth" class="page">
+  <div class="auth-wrap">
+    <div class="text-center mb-4">
+      <div class="logo logo-lg">bot<span>mart</span></div>
+    </div>
+
+    <div class="card bm-card auth-card">
+      <!-- REGISTER -->
+      <div id="authRegister">
+        <h4 class="fw-bold mb-1">Create Your Account</h4>
+        <p class="text-muted small mb-4">Register your profile details below.</p>
+
+        <form id="registerForm" onsubmit="handleRegister(event)">
+          <label class="form-label-bm">I want to register as a:</label>
+          <div class="d-flex gap-3 mb-3">
+            <label class="role-opt flex-fill">
+              <input type="radio" name="regRole" value="developer" class="d-none" checked onchange="toggleCompany(false)">
+              <span class="role-radio"></span> AI Developer
+            </label>
+            <label class="role-opt flex-fill">
+              <input type="radio" name="regRole" value="business" class="d-none" onchange="toggleCompany(true)">
+              <span class="role-radio"></span> Business Client
+            </label>
+          </div>
+
+          <label class="form-label-bm">Full Name *</label>
+          <input id="regName" type="text" class="form-control bm-input" placeholder="User22" required>
+
+          <div id="companyWrap" class="d-none">
+            <label class="form-label-bm">Company Name *</label>
+            <input id="regCompany" type="text" class="form-control bm-input" placeholder="e.g., Acme Automations Ltd.">
+          </div>
+
+          <label class="form-label-bm d-flex justify-content-between">GitHub Profile Link <span class="opt">(Optional)</span></label>
+          <input id="regGithub" type="url" class="form-control bm-input" placeholder="https://github.com/your-username">
+          <p class="field-hint">💡 Linking your GitHub helps clients trust your deployment history.</p>
+
+          <label class="form-label-bm d-flex justify-content-between">LinkedIn Profile Link <span class="opt">(Optional)</span></label>
+          <input id="regLinkedin" type="url" class="form-control bm-input" placeholder="https://linkedin.com/in/your-profile">
+          <p class="field-hint">🤝 A verified LinkedIn profile significantly increases buyer confidence.</p>
+
+          <label class="form-label-bm">Email Address *</label>
+          <input id="regEmail" type="email" class="form-control bm-input" placeholder="dev@botmart.com" required>
+
+          <label class="form-label-bm">Password *</label>
+          <input id="regPass" type="password" class="form-control bm-input" placeholder="••••••••" required>
+
+          <button type="submit" class="btn btn-bm w-100 mt-3">REGISTER NEW PROFILE</button>
+        </form>
+
+        <p class="text-center mt-4 mb-0">
+          <span class="text-muted small">Already have an account?</span>
+          <a href="#" class="bm-link small fw-semibold" onclick="showAuth('login');return false;">Sign In</a>
+        </p>
+      </div>
+
+      <!-- LOGIN -->
+      <div id="authLogin" class="d-none">
+        <h4 class="fw-bold mb-1">Sign In</h4>
+        <p class="text-muted small mb-4">Access your marketplace profile.</p>
+
+        <form id="loginForm" onsubmit="handleLogin(event)">
+          <label class="form-label-bm">Email Address *</label>
+          <input id="loginEmail" type="email" class="form-control bm-input" placeholder="dev@botmart.com" required>
+
+          <label class="form-label-bm">Password *</label>
+          <input id="loginPass" type="password" class="form-control bm-input" placeholder="••••••••" required>
+
+          <button type="submit" class="btn btn-bm w-100 mt-3">SIGN IN</button>
+        </form>
+
+        <p class="text-center mt-4 mb-0">
+          <span class="text-muted small">New to botmart?</span>
+          <a href="#" class="bm-link small fw-semibold" onclick="showAuth('register');return false;">Create Your Account</a>
+        </p>
+      </div>
+
+      <hr class="my-4">
+      <div class="support-footer">
+        <div class="d-flex align-items-center gap-3">
+          <span class="support-icon">🎧</span>
+          <div>
+            <div class="fw-bold small">NEED ACCOUNT HELP?</div>
+            <div class="text-muted" style="font-size:.78rem;">Reach out to our support team directly.</div>
+          </div>
+        </div>
+        <button class="btn btn-outline-bm" onclick="copySupport()">COPY SUPPORT EMAIL</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SYSTEMS FEED ============ -->
+<section id="page-feed" class="page d-none">
+  <div class="container-fluid px-3 px-md-4">
+    <div class="card bm-card p-3 p-md-4 mb-4">
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-1">
+        <div>
+          <h5 class="fw-bold mb-0">Explore AI Systems</h5>
+          <p class="text-muted small mb-3">Discover and integrate production-ready custom workflows seamlessly.</p>
+        </div>
+        <div class="seg-tabs mb-2">
+          <button class="seg-tab active" data-f="ALL" onclick="setFeedFilter('ALL',this)">ALL</button>
+          <button class="seg-tab" data-f="OPEN TO ACQUIRE" onclick="setFeedFilter('OPEN TO ACQUIRE',this)">OPEN TO ACQUIRE</button>
+          <button class="seg-tab" data-f="BOOKED" onclick="setFeedFilter('BOOKED',this)">BOOKED</button>
+        </div>
+      </div>
+      <input id="feedSearch" type="text" class="form-control bm-input" placeholder="Search systems by matching keyword attributes..." oninput="setFeedQuery(this.value)">
+      <div class="d-flex flex-wrap gap-2 mt-3">
+        <button class="chip" onclick="toggleTag('OpenAI',this)">OpenAI</button>
+        <button class="chip" onclick="toggleTag('LangChain',this)">LangChain</button>
+        <button class="chip" onclick="toggleTag('Python',this)">Python</button>
+        <button class="chip" onclick="toggleTag('Slack Bot',this)">Slack Bot</button>
+        <button class="chip" onclick="toggleTag('Database',this)">Database</button>
+      </div>
+    </div>
+
+    <div id="systemsGrid" class="row g-3 g-md-4"></div>
+  </div>
+</section>
+
+<!-- ============ BUSINESS NEEDS ============ -->
+<section id="page-needs" class="page d-none">
+  <div class="container-fluid px-3 px-md-4">
+    <div class="card bm-card p-3 p-md-4 mb-4">
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+        <div>
+          <h5 class="fw-bold mb-0">Active Business Pipelines</h5>
+          <p class="text-muted small mb-0">Browse operational bottlenecks and requests posted directly by companies.</p>
+        </div>
+        <div class="d-flex align-items-center gap-2 flex-wrap">
+          <div class="seg-tabs">
+            <button class="seg-tab active" data-nf="ALL" onclick="setNeedFilter('ALL',this)">ALL</button>
+            <button class="seg-tab" data-nf="OPEN TO BUILD" onclick="setNeedFilter('OPEN TO BUILD',this)">OPEN TO BUILD</button>
+            <button class="seg-tab" data-nf="BOOKED" onclick="setNeedFilter('BOOKED',this)">BOOKED</button>
+          </div>
+          <button class="btn btn-bm btn-sm px-3" data-bs-toggle="modal" data-bs-target="#reqModal">+ POST REQUIREMENT</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="needsGrid" class="row g-3 g-md-4"></div>
+  </div>
+</section>
+
+<!-- ============ CREATOR PORTAL ============ -->
+<section id="page-creator" class="page d-none">
+  <div class="container">
+    <!-- Restricted (Business Client) -->
+    <div id="creatorRestricted" class="card bm-card p-5 text-center d-none" style="max-width:640px;margin:2rem auto;">
+      <div style="font-size:2rem;">🔒</div>
+      <h5 class="fw-bold mt-2">Access Restricted</h5>
+      <p class="text-muted small">Only active AI Developers are authorized to index systemic automations within the compiler matrix portal.</p>
+      <button class="btn btn-bm px-4 mt-2" onclick="go('feed')">RETURN TO MARKET FEED</button>
+    </div>
+
+    <!-- Developer form -->
+    <div class="card bm-card p-4 p-md-5" style="max-width:860px;margin:1.5rem auto;">
+      <div id="creatorFormWrap">
+        <h5 class="fw-bold mb-1">System Compiler Portal</h5>
+        <p class="text-muted small mb-4">Deploy an autonomous workflow straight to the marketplace index.</p>
+
+        <form id="creatorForm" onsubmit="publishSystem(event)">
+          <label class="form-label-bm">System Title *</label>
+          <input id="sysTitle" type="text" class="form-control bm-input" placeholder="e.g., Autonomous Invoice Processing Agent" required>
+
+          <div class="row g-3 mt-0">
+            <div class="col-md-6">
+              <label class="form-label-bm">System Pricing</label>
+              <div class="locked-box">🔒 Locked For Now</div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label-bm">Live Production URL / Demo *</label>
+              <input id="sysUrl" type="url" class="form-control bm-input" placeholder="https://your-agent-space.hf.space" required>
+            </div>
+          </div>
+
+          <label class="form-label-bm mt-3">Operational Breakdown / System Description *</label>
+          <textarea id="sysDesc" class="form-control bm-input" rows="4" placeholder="Provide a detailed overview of what your automation does, how it works, and the problems it solves..." required></textarea>
+
+          <label class="form-label-bm d-flex justify-content-between mt-3">Engine Stack Components <span class="opt">(Optional)</span></label>
+          <input id="sysStack" type="text" class="form-control bm-input" placeholder="e.g., OpenAI, LangChain, Python">
+
+          <button type="submit" class="btn btn-bm w-100 mt-4">PUBLISH SYSTEM LISTING</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ INBOX ============ -->
+<section id="page-inbox" class="page d-none">
+  <div class="container-fluid">
+    <div class="inbox-wrap">
+      <div class="inbox-left">
+        <div class="inbox-title">CONVERSATIONS</div>
+        <div class="inbox-empty">No connections indexed.</div>
+      </div>
+      <div class="inbox-right">
+        <div class="inbox-placeholder">SELECT A CONVERSATION STRING TO BEGIN SETUP OPERATIONS</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROFILE ============ -->
+<section id="page-profile" class="page d-none">
+  <div class="container" style="max-width:860px;">
+    <div class="card bm-card overflow-hidden mt-4">
+      <div class="profile-head">
+        <div class="profile-avatar" id="pfAvatar">HY</div>
+        <div>
+          <h5 class="fw-bold text-white mb-0" id="pfHeadName">Hyfh33</h5>
+          <div class="d-flex align-items-center gap-2 mt-1">
+            <span class="profile-handle" id="pfHeadHandle">@set_handle</span>
+            <span class="profile-badge" id="pfRoleBadge">AI DEVELOPER</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-4">
+        <form id="profileForm" onsubmit="saveProfile(event)">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label-bm">FULL NAME</label>
+              <input id="pfName" type="text" class="form-control bm-input" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label-bm">USERNAME HANDLE</label>
+              <input id="pfHandle" type="text" class="form-control bm-input" placeholder="e.g. devloper@22">
+            </div>
+          </div>
+
+          <label class="form-label-bm mt-3">AVATAR IMAGE URL</label>
+          <input id="pfAvatarUrl" type="url" class="form-control bm-input" placeholder="https://example.com/your-photo.jpg">
+
+          <label class="form-label-bm mt-3">BIO / PIPELINE FOCUS</label>
+          <textarea id="pfBio" class="form-control bm-input" rows="3" placeholder="Tell developers and clients what system workflows you engineer..."></textarea>
+
+          <div class="fw-bold small mt-4 mb-2">Professional Indexes</div>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label-bm">GITHUB PROFILE LINK</label>
+              <input id="pfGithub" type="url" class="form-control bm-input" placeholder="https://github.com/...">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label-bm">LINKEDIN PROFILE LINK</label>
+              <input id="pfLinkedin" type="url" class="form-control bm-input" placeholder="https://linkedin.com/in/...">
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center mt-4">
+            <button type="button" class="btn btn-logout" onclick="logout()">LOG OUT</button>
+            <button type="submit" class="btn btn-bm px-4">SAVE PROFILE</button>
+          </div>
+        </form>
+
+        <hr class="my-4">
+        <div class="support-footer">
+          <div class="d-flex align-items-center gap-3">
+            <span class="support-icon">🎧</span>
+            <div>
+              <div class="fw-bold small">NEED ACCOUNT HELP?</div>
+              <div class="text-muted" style="font-size:.78rem;">Reach out to our support team directly.</div>
+            </div>
+          </div>
+          <button class="btn btn-outline-bm" onclick="copySupport()">COPY SUPPORT EMAIL</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ POST REQUIREMENT MODAL ============ -->
+<div class="modal fade" id="reqModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content bm-card border-0">
+      <form onsubmit="postRequirement(event)">
+        <div class="modal-header border-0">
+          <h6 class="fw-bold mb-0">Post New Requirement</h6>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body pt-0">
+          <label class="form-label-bm">Requirement Title *</label>
+          <input id="reqTitle" type="text" class="form-control bm-input" placeholder="e.g., Automated Lead Enrichment Pipeline" required>
+          <label class="form-label-bm mt-3">Operational Bottleneck / Description *</label>
+          <textarea id="reqDesc" class="form-control bm-input" rows="3" placeholder="Describe the workflow bottleneck your company needs solved..." required></textarea>
+          <label class="form-label-bm mt-3">Expected Duration *</label>
+          <input id="reqDuration" type="text" class="form-control bm-input" placeholder="e.g., 3 weeks" required>
+        </div>
+        <div class="modal-footer border-0">
+          <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-bm btn-sm px-3">PUBLISH REQUIREMENT</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div id="bmToast" class="toast align-items-center text-bg-dark border-0">
+    <div class="d-flex">
+      <div class="toast-body" id="bmToastMsg"></div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
+
